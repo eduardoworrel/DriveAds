@@ -19,7 +19,7 @@ public class AdditionalData
 public class Orquestrator
 {
     private readonly ConnectionMultiplexer _redis;
-    private readonly IDatabase _database;
+    private IDatabase _database;
     private ApplicationDbContext? _db = null;
     private string _key = string.Empty;
 
@@ -38,11 +38,10 @@ public class Orquestrator
         public ClientState State { get; set; }
         public AdditionalData AdditionalData { get; set; }
     }
-
+    private string _url;
     public Orquestrator(string redisConnectionString)
     {
-        _redis = ConnectionMultiplexer.Connect(redisConnectionString);
-        _database = _redis.GetDatabase();
+        _url = redisConnectionString;
     }
 
     public async Task<string> StartOrContinueProcess(
@@ -55,6 +54,8 @@ public class Orquestrator
     {
         try
         {
+            using var redis = ConnectionMultiplexer.Connect(_url);
+            _database = redis.GetDatabase();
             var clientStateKey = GetRedisKeyForClient(id);
             var clientDataJson = _database.StringGet(clientStateKey);
             _db = db;
@@ -86,11 +87,11 @@ public class Orquestrator
                 default:
                     throw new InvalidOperationException("Estado desconhecido");
             }
+        }catch(Exception e){
+            Console.WriteLine(e.ToString());
+            return "free";
         }
-        finally
-        {
-            _redis.Dispose(); // Finaliza a conexão Redis após o processamento
-        }
+     
     }
 
     // Métodos para processar cada estado
