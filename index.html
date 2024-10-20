@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const main = async () => {
+  const result = await fetch('https://api.aimlapi.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer 74b0c0abd2294719ba29967c27bde367',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo',
+      max_tokens: 300,
+      messages: [
+        {
+          role: 'user',
+          content: 'What’s in this image? ;)',
+        },
+      ],
+    }),
+  }).then((res) => res.json());
+
+  const message = result.choices[0].message.content;
+  console.log(`Assistant: ${message}`);
+};
+
+main();
+    </script>
+</body>
+</html>

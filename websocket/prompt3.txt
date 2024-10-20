@@ -1,0 +1,107 @@
+
+You will be given a set of demographic data for *{0}* passengers and a list of available advertisements.
+
+Your task is to choose an advertisement that best fits the combined demographic profile of the passengers and return only the ID. If no exact match is found, return the advertisement that aligns most closely with the demographic data provided.
+
+
+Exemples of Output:
+
+example 1:
+
+Input:
+
+Passengers’ Data:
+There is one passenger visible in the image.
+Passenger:
+Approximate age: 22
+Likely gender: Male
+Possible race/ethnicity: Hispanic
+Clothing style: Casual, t-shirt
+
+Available Advertisements with IDs:
+ID:12345abc-6789-def0-1122-334455667788, Text:Buy the latest tech gadgets!, Ages:18-25, Preferences:Tech enthusiasts, Morning, Afternoon.
+ID:98765xyz-4321-fedc-9988-776655443322, Text:Find the best pet care products., Ages:26-35, Preferences:Pet owners, Evening, Night.
+
+Output:
+
+12345abc-6789-def0-1122-334455667788
+
+example 2:
+
+Input:
+
+Passengers’ Data:
+There are two passengers visible in the image.
+Passenger 1:
+Approximate age: 30
+Likely gender: Female
+Possible race/ethnicity: Asian
+Clothing style: Business casual
+
+Passenger 2:
+Approximate age: 32
+Likely gender: Male
+Possible race/ethnicity: White
+Clothing style: Casual, jeans and t-shirt
+
+Available Advertisements with IDs:
+ID:a1b2c3d4-5678-90ab-cdef-1234567890ab, Text:Upgrade your business skills!, Ages:25-35, Preferences:Professional, Morning, Afternoon.
+ID:f6e5d4c3-b2a1-0f9e-8d7c-6b5a4c3e2f1d, Text:Enjoy a luxury cruise!, Ages:35-45, Preferences:Travel enthusiasts, Afternoon, Evening.
+
+Output:
+
+a1b2c3d4-5678-90ab-cdef-1234567890ab
+
+example 3:
+
+Input:
+
+Passengers’ Data:
+There is one passenger visible in the image.
+Passenger:
+Approximate age: 28
+Likely gender: Female
+Possible race/ethnicity: Black
+Clothing style: Casual, jeans
+
+Available Advertisements with IDs:
+ID:aabbccdd-1122-3344-5566-77889900aabb, Text:Join the latest fitness craze!, Ages:18-30, Preferences:Morning, Afternoon.
+ID:ffeeddcc-bbaa-9988-7766-554433221100, Text:Take your cooking skills to the next level!, Ages:26-35, Preferences:Afternoon, Evening.
+
+Output:
+
+ffeeddcc-bbaa-9988-7766-554433221100
+
+example 4:
+
+Input:
+
+Passengers’ Data:
+There are two passengers visible in the image.
+Passenger 1:
+Approximate age: 22
+Likely gender: Male
+Clothing style: Sporty
+Passenger 2:
+Approximate age: 21
+Likely gender: Female
+Clothing style: Casual
+
+Available Advertisements with IDs:
+ID:abc123-def456-ghi789-jkl012-mno345, Text:Explore our travel deals!, Ages:18-30, Preferences:Travel enthusiasts, Morning, Afternoon.
+ID:pqr678-stu901-vwx234-yza567-bcd890, Text:Join our tech innovation conference!, Ages:25-35, Preferences:Tech professionals, Morning, Afternoon.
+
+Output:
+
+abc123-def456-ghi789-jkl012-mno345
+
+Passengers’ Data:
+
+{1}
+
+Available Advertisements with IDs:
+
+{2}
+
+
+Output:

@@ -1,0 +1,14 @@
+You will receive a set of images taken from inside various environments.
+
+Your task is to analyze the images and count how many people are present in the environment.
+
+Respond exclusively with the number of people. Provide only the number of people.
+
+If there is no one in the environment, respond with “0”.
+
+Example response format:
+
+- 5 (if there are 5 people in the environment)
+- 0 (if there are no people in the environment)
+
+Respond according to the provided images:

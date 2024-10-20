@@ -1,0 +1,60 @@
+﻿@page
+@model webapp.Pages.Ad.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Advertisement</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Advertisement.Id" />
+            <div class="form-group">
+                <label asp-for="Advertisement.Text" class="control-label"></label>
+                <input asp-for="Advertisement.Text" class="form-control" />
+                <span asp-validation-for="Advertisement.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Advertisement.Ages" class="control-label"></label>
+                <input asp-for="Advertisement.Ages" class="form-control" />
+                <span asp-validation-for="Advertisement.Ages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Advertisement.Pet" class="control-label"></label>
+                <input asp-for="Advertisement.Pet" class="form-control" />
+                <span asp-validation-for="Advertisement.Pet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Advertisement.Times" class="control-label"></label>
+                <input asp-for="Advertisement.Times" class="form-control" />
+                <span asp-validation-for="Advertisement.Times" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Advertisement.Where" class="control-label"></label>
+                <input asp-for="Advertisement.Where" class="form-control" />
+                <span asp-validation-for="Advertisement.Where" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Advertisement.CreatedAt" class="control-label"></label>
+                <input asp-for="Advertisement.CreatedAt" class="form-control" />
+                <span asp-validation-for="Advertisement.CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

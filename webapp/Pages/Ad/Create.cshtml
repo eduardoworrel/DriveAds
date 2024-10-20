@@ -1,0 +1,109 @@
+﻿@page
+@model webapp.Pages.Ad.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="my-4">Create Advertisement</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title">Advertisement Details</h4>
+        <hr />
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="AdvertisementViewModel.Text" class="form-label"></label>
+                <textarea asp-for="AdvertisementViewModel.Text" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="AdvertisementViewModel.Text" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Age Ranges</label>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="18-25" id="age18-25" />
+                    <label class="form-check-label" for="age18-25">18-25 years</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="26-35" id="age26-35" />
+                    <label class="form-check-label" for="age26-35">26-35 years</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="36-45" id="age36-45" />
+                    <label class="form-check-label" for="age36-45">36-45 years</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="46-55" id="age46-55" />
+                    <label class="form-check-label" for="age46-55">46-55 years</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="56-65" id="age56-65" />
+                    <label class="form-check-label" for="age56-65">56-65 years</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Ages" value="65+" id="age65+" />
+                    <label class="form-check-label" for="age65+">65+ years</label>
+                </div>
+                <span asp-validation-for="AdvertisementViewModel.Ages" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Pet Preference</label>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="AdvertisementViewModel.Pet" value="With pet" id="withPet" />
+                    <label class="form-check-label" for="withPet">With pet</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="AdvertisementViewModel.Pet" value="Without pet" id="withoutPet" />
+                    <label class="form-check-label" for="withoutPet">Without pet</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="AdvertisementViewModel.Pet" value="No preference" id="noPreference" />
+                    <label class="form-check-label" for="noPreference">No preference</label>
+                </div>
+                <span asp-validation-for="AdvertisementViewModel.Pet" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Available Times</label>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Times" value="Morning" id="timeMorning" />
+                    <label class="form-check-label" for="timeMorning">Morning</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Times" value="Afternoon" id="timeAfternoon" />
+                    <label class="form-check-label" for="timeAfternoon">Afternoon</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Times" value="Evening" id="timeEvening" />
+                    <label class="form-check-label" for="timeEvening">Evening</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="AdvertisementViewModel.Times" value="Night" id="timeNight" />
+                    <label class="form-check-label" for="timeNight">Night</label>
+                </div>
+                <span asp-validation-for="AdvertisementViewModel.Times" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AdvertisementViewModel.Where" class="form-label"></label>
+                <input asp-for="AdvertisementViewModel.Where" class="form-control" />
+                <span asp-validation-for="AdvertisementViewModel.Where" class="text-danger"></span>
+            </div>
+
+            <div class="d-grid">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

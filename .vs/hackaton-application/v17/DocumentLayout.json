@@ -1,0 +1,207 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\PROJETOS\\hackaton-application\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\pages\\ad\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\pages\\ad\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|c:\\projetos\\hackaton-application\\webapp\\data\\advertisement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F6F4D6-C2DE-4B00-9378-C39FAF793DA8}|webapp\\webapp.csproj|solutionrelative:webapp\\data\\advertisement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Index.cshtml.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Index.cshtml.cs",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Index.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:34:02.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Index.cshtml",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Index.cshtml",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Index.cshtml",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T19:34:01.928Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Delete.cshtml.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Delete.cshtml.cs",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Delete.cshtml.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Delete.cshtml.cs",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Delete.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:34:01.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Delete.cshtml",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Delete.cshtml",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Delete.cshtml",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Delete.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T19:34:01.745Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Details.cshtml.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Details.cshtml.cs",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Details.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:34:01.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Details.cshtml",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Details.cshtml",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Details.cshtml",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Details.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T19:34:01.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Edit.cshtml.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Edit.cshtml.cs",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Edit.cshtml.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Edit.cshtml.cs",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Edit.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:34:01.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Edit.cshtml",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Edit.cshtml",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Edit.cshtml",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Edit.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T19:34:01.372Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Create.cshtml.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Create.cshtml.cs",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Create.cshtml.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Create.cshtml.cs",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Create.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:34:01.251Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Create.cshtml",
+              "RelativeDocumentMoniker": "webapp\\Pages\\Ad\\Create.cshtml",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Pages\\Ad\\Create.cshtml",
+              "RelativeToolTip": "webapp\\Pages\\Ad\\Create.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T19:34:00.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Advertisement.cs",
+              "DocumentMoniker": "C:\\PROJETOS\\hackaton-application\\webapp\\Data\\Advertisement.cs",
+              "RelativeDocumentMoniker": "webapp\\Data\\Advertisement.cs",
+              "ToolTip": "C:\\PROJETOS\\hackaton-application\\webapp\\Data\\Advertisement.cs",
+              "RelativeToolTip": "webapp\\Data\\Advertisement.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T19:33:05.774Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
