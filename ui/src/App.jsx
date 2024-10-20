@@ -12,7 +12,6 @@ export default function App() {
   const [media, setMedia] = useState(null);
   const [ative, setAtive] = useState(false);
   const [nome, setNome] = useState('');
-  const [renderMinhasConquistas, setRenderMinhasConquistas] = useState(false);
   const [renderSendName, setRenderSendName] = useState(false);
   const videoRef = useRef(null);
   const wsRef = useRef(null);
@@ -32,6 +31,9 @@ export default function App() {
   };
 
   const handleSendNome = () => {
+    if(nome.length == 0){
+      return alert('The name field is mandatory.')
+    }
     setRenderSendName(true); // Altera o estado para mostrar o restante da página
   };
 
@@ -134,45 +136,35 @@ let mimeType = getSupportedMimeType(types);
     }
   }, [media]);
 
-  const handleMinhasConquistas = () => {
-    setRenderMinhasConquistas(prev => !prev);
-  };
+
 
   return (
     <Box display="flex" flexDirection={'column'} justifyContent="center" alignItems="center" height="100vh" width="100vw" bgcolor={theme.palette.background.paper}>
       {!renderSendName && (
-        <Box display={'flex'} justifyContent={'space-between'} width={theme.spacing(50)}>
-          <Box>
+        <Box display={'flex'} justifyContent={'center'} flexDirection={'column'} width={theme.spacing(50)}  gap={10}>
+          <Box justifyContent={'center'} display={'flex'}>
             <TextField
-              label={'Nome do motorista: '}
+              label={'Name:'}
               onChange={handleChangeNome}
             />
           </Box>
-          <Button onClick={handleSendNome} style={{backgroundColor:theme.palette.primary.dark}}> 
-            Send
-          </Button>
+          <Box justifyContent={'center'} display={'flex'} >
+            <Button onClick={handleSendNome} style={{ backgroundColor: theme.palette.primary.dark, width:'100px' }}  >
+              Send
+            </Button>
+          </Box>
         </Box>
       )}
 
       {renderSendName && (
         <>
-          <Skeleton width={theme.spacing(100)} height={2} />
 
-          <Box height={theme.spacing(40)} width={theme.spacing(40)} display={'flex'} alignItems={'center'} justifyContent={'center'} borderColor={theme.palette.primary.dark}>
-            {renderMinhasConquistas && (
-              <MinhasConquistas />
-            )}
-          </Box>
-
-          <Box display="flex" borderRadius={5} padding={15} flexDirection="column" gap={10} width={theme.spacing(40)}>
-            {!renderMinhasConquistas && (
-              <Button onClick={handleVideo} style={{backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.light}}>
+          <Box display="flex" flexDirection="column">
+          
+              <Button onClick={handleVideo} style={{ backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.dark, width:'100px'  }}>
                 {ative ? 'Cancel' : 'Start'}
               </Button>
-            )}
-            {/* <Button bgcolor={theme.palette.secondary.main} onClick={handleMinhasConquistas} style={{backgroundColor:theme.palette.primary.dark}}>
-              {renderMinhasConquistas ? 'Back' : 'Minhas Conquistas'}
-            </Button> */}
+
           </Box>
         </>
       )}
