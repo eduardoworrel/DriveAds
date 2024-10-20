@@ -9,8 +9,7 @@ Example 1:
 Input:
 
 People’s Data:
-There is one person visible in the image.
-Person:
+
 Approximate age: 22
 Likely gender: Male
 Possible race/ethnicity: Hispanic
@@ -28,7 +27,7 @@ Example 2:
 Input:
 
 People’s Data:
-There are two people visible in the image.
+
 Person 1:
 Approximate age: 30
 Likely gender: Female
@@ -53,7 +52,6 @@ Example 3:
 Input:
 
 People’s Data:
-There is one person visible in the image.
 Person:
 Approximate age: 28
 Likely gender: Female
@@ -72,7 +70,6 @@ Example 4:
 Input:
 
 People’s Data:
-There are two people visible in the image.
 Person 1:
 Approximate age: 22
 Likely gender: Male
@@ -98,4 +95,5 @@ Available Advertisements with IDs:
 
 {2}
 
+NOTE: always choose one
 Output:

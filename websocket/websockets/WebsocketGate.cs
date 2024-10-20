@@ -56,13 +56,14 @@ public static class WebsocketGate
                     true,
                     CancellationToken.None
                 );
-
-                await webSocket.SendAsync(
-                    Encoding.UTF8.GetBytes("free"),
-                    WebSocketMessageType.Text,
-                    true,
-                    CancellationToken.None
-                );
+                if(candidate != "free"){
+                    await webSocket.SendAsync(
+                        Encoding.UTF8.GetBytes("free"),
+                        WebSocketMessageType.Text,
+                        true,
+                        CancellationToken.None
+                    );
+                }
             }
             else { }
             }catch{ }

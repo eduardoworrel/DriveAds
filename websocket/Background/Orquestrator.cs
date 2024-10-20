@@ -89,9 +89,6 @@ public class Orquestrator
         byte[] imageBytes = stream.ToArray(); // Converte o MemoryStream em array de bytes
         string base64Image = Convert.ToBase64String(imageBytes); // Converte o array de bytes para base64
 
-        // Salvar os bytes da imagem em um arquivo
-        File.WriteAllBytes("outputImage.text", Encoding.UTF8.GetBytes(base64Image));
-
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt1.txt"));
 
         var result = await LlamaService.SendImagesToApiAsync(_key, [base64Image], prompt, cts);
@@ -137,15 +134,13 @@ public class Orquestrator
         }
         else
         {
-            Console.WriteLine("result3--:"+result);
             clientData.AdditionalData.Demographic3 = result;
             prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt3.txt"));
             
             var advertisements = await _db.Advertisements.Take(100).ToListAsync();
-
+          
             // Filtra anúncios para evitar os dois últimos reproduzidos
             advertisements = advertisements.Where(ad => !clientData.AdditionalData.LastTwoAdIds.Contains(ad.Id)).ToList();
-            Console.WriteLine("ads-->"+advertisements.Count);
             string advertisementsJoined = string.Join(Environment.NewLine + Environment.NewLine, advertisements.ConvertAll(o =>
                 $@"ID:{o.Id}, Text:{o.Text}, Preferences:{o.Pet}, when:{o.Times}, where:{o.Where}, Ages:{o.Ages};"
             ));
@@ -156,8 +151,8 @@ public class Orquestrator
 {clientData.AdditionalData.Demographic3}.
 Now is: {clientData.AdditionalData.Time}:
             ";
+
             var finalPrompt = string.Format(prompt, clientData.AdditionalData.Quantity, demographic, advertisementsJoined);
-            Console.WriteLine(finalPrompt);
             var trying = 0;
             Guid selection = Guid.Empty;
             while(trying < 4 && selection == Guid.Empty){
@@ -187,12 +182,13 @@ Now is: {clientData.AdditionalData.Time}:
 
             // Atualiza a lista dos últimos dois anúncios
             clientData.AdditionalData.LastTwoAdIds.Add(ad.Id);
-            if (clientData.AdditionalData.LastTwoAdIds.Count > 2)
+            if (clientData.AdditionalData.LastTwoAdIds.Count > 4)
             {
                 clientData.AdditionalData.LastTwoAdIds.RemoveAt(0); // Remove o mais antigo
             }
-
+           _additionalData.LastTwoAdIds = clientData.AdditionalData.LastTwoAdIds;
             UpdateClientState(id, ClientState.AguardandoPassageiro, _additionalData);
+            Console.WriteLine("reset");
             return ad?.Text ?? string.Empty;
         }
     }

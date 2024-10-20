@@ -1,4 +1,4 @@
-You will receive an image of the inside of a vehicle, which may contain one or more passengers in the backseat. 
+You will receive an image which may contain one or more people. 
 
 For each passenger, provide the following information as short text, one line per category.
 
@@ -7,13 +7,13 @@ If you can’t tell the information, write "Unknown".
 Number each passenger separately if there is more than one.
 
 Provide:
-	•	Approximate age
-	•	Likely gender
-	•	Possible race/ethnicity
-	•	Facial expression
-	•	Clothing style
-	•	Presence of accessories
-	•	Body posture
+•	Approximate age
+•	Likely gender
+•	Possible race/ethnicity
+•	Facial expression
+•	Clothing style
+•	Presence of accessories
+•	Body posture
 
 Format your response like this:
 
@@ -37,4 +37,4 @@ Clothing style: Business casual
 Presence of accessories: Glasses, watch
 Body posture: Sitting upright
 
-Repeat this format for all passengers.
+Repeat this format for each.

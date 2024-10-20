@@ -39,7 +39,7 @@ public static class LlamaService
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
         int attempt = 0;
-        while (attempt < MaxRetries || !cts.IsCancellationRequested)
+        while (attempt < MaxRetries && !cts.IsCancellationRequested)
         {
             try
             {
@@ -68,7 +68,7 @@ public static class LlamaService
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Erro ao chamar a API: {ex.Message}");
-                if (attempt < MaxRetries|| !cts.IsCancellationRequested)
+                if (attempt < MaxRetries && !cts.IsCancellationRequested)
                 {
                     Console.WriteLine(
                         $"Tentativa {attempt} falhou. Tentando novamente em {RetryDelay / 1000} segundos..."
@@ -131,7 +131,7 @@ public static class LlamaService
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
         int attempt = 0;
-        while (attempt < MaxRetries || !cts.IsCancellationRequested)
+        while (attempt < MaxRetries && !cts.IsCancellationRequested)
         {
             try
             {
@@ -160,7 +160,7 @@ public static class LlamaService
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Erro ao chamar a API: {ex.Message}");
-                if (attempt < MaxRetries || !cts.IsCancellationRequested)
+                if (attempt < MaxRetries && !cts.IsCancellationRequested)
                 {
                     Console.WriteLine(
                         $"Tentativa {attempt} falhou. Tentando novamente em {RetryDelay / 1000} segundos..."

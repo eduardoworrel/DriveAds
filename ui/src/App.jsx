@@ -38,6 +38,7 @@ export default function App() {
   const wsRef = useRef(null);
   const captureIntervalRef = useRef(null);
   const ShouldCaptureIntervalRef = useRef(true);
+  const reconnectTimeoutRef = useRef(null); // Armazena o timeout de reconexão
 
   const constraints = {
     audio: false,
@@ -54,70 +55,93 @@ export default function App() {
   };
 
   const handleSendNome = () => {
-    setRenderSendName(true); // Altera o estado para mostrar o restante da página
+    setRenderSendName(true);
   };
 
   const handleVideo = async () => {
     if (ative) {
-      // Se já está ativo, parar a captura e fechar o WebSocket
-      if (media) {
-        media.getTracks().forEach(track => track.stop());
-      }
-      clearInterval(captureIntervalRef.current);
-      setAtive(false);
-      setMedia(null);
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
-      console.log("Media stopped and WebSocket closed");
+      stopVideoCapture(); // Função para parar a captura de vídeo e fechar WebSocket
     } else {
-      // Iniciar a captura de mídia e WebSocket
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        setMedia(stream);
-        setAtive(true);
-        console.log("Media started");
-
-        wsRef.current = new WebSocket('ws://localhost:5017/api/sync/' + nome + (new Date()).toTimeString());
-        wsRef.current.onopen = () => {
-          console.log('WebSocket connected');
-          startImageCapture(stream);
-        }
-        wsRef.current.onclose = () => {
-          console.log('WebSocket closed');
-          wsRef.current.close();
-        };
-      } catch (error) {
-        console.error(`getUserMedia error: ${error.name}`, error);
-      }
+      startVideoCapture(); // Função para iniciar a captura de vídeo e WebSocket
     }
+  };
+
+  const stopVideoCapture = () => {
+    if (media) {
+      media.getTracks().forEach(track => track.stop());
+    }
+    clearInterval(captureIntervalRef.current);
+    setAtive(false);
+    setMedia(null);
+    if (wsRef.current) {
+      wsRef.current.close();
+    }
+    console.log("Media stopped and WebSocket closed");
+  };
+
+  const startVideoCapture = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      setMedia(stream);
+      setAtive(true);
+      console.log("Media started");
+
+      connectWebSocket(stream); // Conecta o WebSocket
+    } catch (error) {
+      console.error(`getUserMedia error: ${error.name}`, error);
+    }
+  };
+
+  const connectWebSocket = (stream) => {
+    // wsRef.current = new WebSocket('ws://localhost:5017/api/sync/' + nome + (new Date()).toTimeString());
+    wsRef.current = new WebSocket('wss://ws.eduardoworrel.com/api/sync/' + nome + (new Date()).toTimeString());
+
+    wsRef.current.onopen = () => {
+      console.log('WebSocket connected');
+      startImageCapture(stream);
+    };
+
+    wsRef.current.onclose = () => {
+      console.log('WebSocket closed, attempting to reconnect...');
+      reconnectWebSocket(stream); // Chama a função para reconectar
+    };
+
+    wsRef.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      wsRef.current.close(); // Fecha o WebSocket ao detectar erro
+    };
+  };
+
+  const reconnectWebSocket = (stream) => {
+    clearTimeout(reconnectTimeoutRef.current); // Limpa qualquer reconexão anterior
+    reconnectTimeoutRef.current = setTimeout(() => {
+      connectWebSocket(stream); // Tenta reconectar após um atraso
+    }, 5000); // Aguarda 5 segundos antes de tentar reconectar
   };
 
   const startImageCapture = (stream) => {
     wsRef.current.onmessage = (event) => {
       const message = event.data;
       console.log('Received message:', message);
-      if(message == "free"){
+      if (message === "free") {
         ShouldCaptureIntervalRef.current = true;
-      }else{
+      } else {
         textToSpeech(message);
       }
     };
     const track = stream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(track);
 
-    // Configura a captura de imagem em intervalos regulares (por exemplo, a cada 3 segundos)
     captureIntervalRef.current = setInterval(async () => {
-      if(ShouldCaptureIntervalRef.current == false){
+      if (ShouldCaptureIntervalRef.current === false) {
         return;
       }
       try {
         const frame = await imageCapture.takePhoto();
-      
         const buffer = await blobToBuffer(frame);
 
         if (wsRef.current.readyState === WebSocket.OPEN) {
-          ShouldCaptureIntervalRef.current = true;
+          ShouldCaptureIntervalRef.current = false;
           wsRef.current.send(buffer);
         }
       } catch (error) {
@@ -146,7 +170,7 @@ export default function App() {
               onChange={handleChangeNome}
             />
           </Box>
-          <Button onClick={handleSendNome} style={{backgroundColor:theme.palette.primary.dark}}> 
+          <Button onClick={handleSendNome} style={{ backgroundColor: theme.palette.primary.dark }}>
             Send
           </Button>
         </Box>
@@ -164,7 +188,7 @@ export default function App() {
 
           <Box display="flex" borderRadius={5} padding={15} flexDirection="column" gap={10} width={theme.spacing(40)}>
             {!renderMinhasConquistas && (
-              <Button onClick={handleVideo} style={{backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.light}}>
+              <Button onClick={handleVideo} style={{ backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.light }}>
                 {ative ? 'Cancel' : 'Start'}
               </Button>
             )}
