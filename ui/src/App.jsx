@@ -12,7 +12,40 @@ const textToSpeech = (text) => {
   utterance.rate = 1;
   synth.speak(utterance);
 };
+function reduceImageSize(blob, maxWidth, maxHeight, quality) {
+  return new Promise((resolve, reject) => {
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      img.onload = () => {
+          let { width, height } = img;
 
+          // Redimensiona a imagem mantendo a proporção
+          if (width > height) {
+              if (width > maxWidth) {
+                  height = Math.round((height * maxWidth) / width);
+                  width = maxWidth;
+              }
+          } else {
+              if (height > maxHeight) {
+                  width = Math.round((width * maxHeight) / height);
+                  height = maxHeight;
+              }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Gera um novo blob com a qualidade desejada
+          canvas.toBlob((newBlob) => resolve(newBlob), 'image/jpeg', quality);
+      };
+
+      img.onerror = reject;
+      img.src = URL.createObjectURL(blob);
+  });
+}
 function blobToBuffer(blob) {
   return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -93,8 +126,8 @@ export default function App() {
   };
 
   const connectWebSocket = (stream) => {
-    // wsRef.current = new WebSocket('ws://localhost:5017/api/sync/' + nome + (new Date()).toTimeString());
-    wsRef.current = new WebSocket('wss://ws.eduardoworrel.com/api/sync/' + nome + (new Date()).toTimeString());
+    wsRef.current = new WebSocket('ws://localhost:5017/api/sync/' + nome + (new Date()).toTimeString());
+    //wsRef.current = new WebSocket('wss://ws.eduardoworrel.com/api/sync/' + nome + (new Date()).toTimeString());
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connected');
@@ -137,10 +170,8 @@ export default function App() {
         return;
       }
       try {
-        const frame = await imageCapture.takePhoto({
-          imageHeight:100,
-          imageWidth:100
-        });
+        let frame = await imageCapture.takePhoto();
+        frame = await reduceImageSize(frame,200,200,0.8)
         const buffer = await blobToBuffer(frame);
 
         if (wsRef.current.readyState === WebSocket.OPEN) {
