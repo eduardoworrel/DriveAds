@@ -137,7 +137,10 @@ export default function App() {
         return;
       }
       try {
-        const frame = await imageCapture.takePhoto();
+        const frame = await imageCapture.takePhoto({
+          imageHeight:300,
+          imageWidth:300
+        });
         const buffer = await blobToBuffer(frame);
 
         if (wsRef.current.readyState === WebSocket.OPEN) {
