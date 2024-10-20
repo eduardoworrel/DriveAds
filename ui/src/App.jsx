@@ -5,6 +5,7 @@ import theme from './theme';
 import { useState, useRef, useEffect } from 'react';
 import { MinhasConquistas } from './shared/components/minhas-conquistas/MinhasConquistas';
 import { Skeleton, TextField } from '@mui/material';
+import _default from '@mui/material/styles/identifier';
 const textToSpeech = (text) => {
   const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(text);
@@ -225,7 +226,7 @@ export default function App() {
 
           <Box display="flex" flexDirection="column">
           
-              <Button onClick={handleVideo} style={{ backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.dark, width:'100px'  }}>
+              <Button onClick={handleVideo} style={{ backgroundColor: ative ? theme.palette.primary.light : theme.palette.primary.dark, width:'100px', color:  ative ? theme.palette.primary.dark : theme.palette.primary.light}}>
                 {ative ? 'Cancel' : 'Start'}
               </Button>
 
