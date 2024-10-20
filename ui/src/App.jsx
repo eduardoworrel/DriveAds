@@ -53,7 +53,7 @@ export default function App() {
         setAtive(true);
         console.log("Media started");
 
-        wsRef.current = new WebSocket('ws://localhost:5017/api/sync/'+nome + (new Date()).toTimeString());
+        wsRef.current = new WebSocket('wss://ws.eduardoworrel.com/api/sync/'+nome + (new Date()).toTimeString());
         wsRef.current.onopen = () => {
           console.log('WebSocket connected');
           sendMediaStream(stream);
