@@ -20,7 +20,7 @@ public static class VideoToImageService
                         $"-i pipe:0 -vf scale=800:-1,fps=1 -f image2pipe -vcodec mjpeg pipe:1",
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    RedirectStandardError = true,
+                    // RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 },
