@@ -227,7 +227,7 @@ Now is: {clientData.AdditionalData.Time}:
 
             // Atualiza a lista dos últimos dois anúncios
             clientData.AdditionalData.LastTwoAdIds.Add(ad.Id);
-            if (clientData.AdditionalData.LastTwoAdIds.Count > 4)
+            if (clientData.AdditionalData.LastTwoAdIds.Count > 5)
             {
                 clientData.AdditionalData.LastTwoAdIds.RemoveAt(0); // Remove o mais antigo
             }
