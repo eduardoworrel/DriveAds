@@ -41,12 +41,12 @@ public static class WebsocketGate
 
             memoryStream.Seek(0, SeekOrigin.Begin);
             try{
-
             var candidate = await orq.StartOrContinueProcess(
                 id,
                 memoryStream,
                 db,
-                config["llama_key"] ?? throw new Exception("llama key")
+                config["llama_key"] ?? throw new Exception("llama key"),
+                cts
             );
             if (candidate.Length > 0)
             {
@@ -56,13 +56,14 @@ public static class WebsocketGate
                     true,
                     CancellationToken.None
                 );
-
-                await webSocket.SendAsync(
-                    Encoding.UTF8.GetBytes("free"),
-                    WebSocketMessageType.Text,
-                    true,
-                    CancellationToken.None
-                );
+                if(candidate != "free"){
+                    await webSocket.SendAsync(
+                        Encoding.UTF8.GetBytes("free"),
+                        WebSocketMessageType.Text,
+                        true,
+                        CancellationToken.None
+                    );
+                }
             }
             else { }
             }catch{ }
