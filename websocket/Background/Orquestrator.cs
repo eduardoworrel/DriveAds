@@ -110,6 +110,7 @@ public class Orquestrator
     private async Task<string> HandleColetandoDados(string id, MemoryStream stream, ClientData clientData)
     {
         var images = await VideoToImageService.ConvertVideoFragmentToImagesAsync(stream.ToArray());
+        Console.WriteLine($"images2..."+images.Count);
 
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt2.txt"));
 
