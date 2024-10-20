@@ -13,4 +13,6 @@ COPY --from=build /out ./
 
 ENV ENV_PROJECT_NAME "./websocket"
 
+EXPOSE 5017
+ENV ASPNETCORE_URLS="http://+:5017"
 CMD $ENV_PROJECT_NAME
