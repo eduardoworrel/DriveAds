@@ -136,7 +136,9 @@ export default function App() {
 
     wsRef.current.onclose = () => {
       console.log('WebSocket closed, attempting to reconnect...');
-      reconnectWebSocket(stream); // Chama a função para reconectar
+      if(ative == false){
+        reconnectWebSocket(stream); // Chama a função para reconectar
+      }
     };
 
     wsRef.current.onerror = (error) => {
