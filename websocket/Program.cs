@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped(provider => new Orquestrator(
     builder.Configuration.GetConnectionString("RedisConnection")
+     ?? Environment.GetEnvironmentVariable("RedisConnection")
         ?? throw new InvalidOperationException("Redis erro")
 ));
 
