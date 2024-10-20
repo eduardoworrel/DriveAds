@@ -93,11 +93,12 @@ public class Orquestrator
        try
        {
             result = Regex.Replace(result.Trim(), @"\D", "");
+            Console.WriteLine("first return-:"+result);
             var quantity = int.Parse(result);
             if(quantity > 0)
             {
                 clientData.AdditionalData.Quantity = quantity;
-                UpdateClientState(id, ClientState.ColetandoDados, clientData.AdditionalData);
+                return await HandleColetandoDados(id, stream, clientData);
             }
        }
        catch
@@ -109,6 +110,7 @@ public class Orquestrator
 
     private async Task<string> HandleColetandoDados(string id, MemoryStream stream, ClientData clientData)
     {
+        Console.WriteLine($"images2...;");
         var images = await VideoToImageService.ConvertVideoFragmentToImagesAsync(stream.ToArray());
         Console.WriteLine($"images2..."+images.Count);
 

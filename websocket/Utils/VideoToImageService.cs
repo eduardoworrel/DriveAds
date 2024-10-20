@@ -1,65 +1,76 @@
 using System.Diagnostics;
+using System.Threading;
 
 public static class VideoToImageService
 {
+    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1); // Permitir uma execução por vez
+
     public static async Task<List<string>> ConvertVideoFragmentToImagesAsync(byte[] videoData)
     {
-        var imageBase64List = new List<string>();
+        await _semaphore.WaitAsync(); // Bloqueia a execução de outras chamadas
 
-        string outputDir = "temp_images";
-        Directory.CreateDirectory(outputDir);
-
-        using (var videoStream = new MemoryStream(videoData))
+        try
         {
-            var ffmpegProcess = new Process
+            var imageBase64List = new List<string>();
+
+            string outputDir = "temp_images";
+            Directory.CreateDirectory(outputDir);
+
+            using (var videoStream = new MemoryStream(videoData))
             {
-                StartInfo = new ProcessStartInfo
+                var ffmpegProcess = new Process
                 {
-                    FileName = "ffmpeg",
-                    Arguments =
-                        $"-i pipe:0 -vf scale=800:-1,fps=1 -f image2pipe -vcodec mjpeg pipe:1",
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    // RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                },
-            };
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "ffmpeg",
+                        Arguments =
+                            $"-i pipe:0 -vf scale=800:-1,fps=1 -f image2pipe -vcodec mjpeg pipe:1",
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    },
+                };
 
-            ffmpegProcess.Start();
+                ffmpegProcess.Start();
 
-            await videoStream.CopyToAsync(ffmpegProcess.StandardInput.BaseStream);
-            ffmpegProcess.StandardInput.Close();
+                await videoStream.CopyToAsync(ffmpegProcess.StandardInput.BaseStream);
+                ffmpegProcess.StandardInput.Close();
 
-            using (var memoryStream = new MemoryStream())
-            {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-
-                while (
-                    (
-                        bytesRead = await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(
-                            buffer,
-                            0,
-                            buffer.Length
-                        )
-                    ) > 0
-                )
+                using (var memoryStream = new MemoryStream())
                 {
-                    memoryStream.Write(buffer, 0, bytesRead);
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while (
+                        (
+                            bytesRead = await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(
+                                buffer,
+                                0,
+                                buffer.Length
+                            )
+                        ) > 0
+                    )
+                    {
+                        memoryStream.Write(buffer, 0, bytesRead);
+                    }
+
+                    if (memoryStream.Length > 0)
+                    {
+                        byte[] imageData = memoryStream.ToArray();
+                        string imageBase64 = Convert.ToBase64String(imageData);
+                        imageBase64List.Add(imageBase64);
+                    }
                 }
 
-                if (memoryStream.Length > 0)
-                {
-                    byte[] imageData = memoryStream.ToArray();
-                    string imageBase64 = Convert.ToBase64String(imageData);
-                    imageBase64List.Add(imageBase64);
-                }
+                await ffmpegProcess.WaitForExitAsync();
             }
 
-            await ffmpegProcess.WaitForExitAsync();
+            return imageBase64List;
         }
-
-        return imageBase64List;
+        finally
+        {
+            _semaphore.Release(); 
+        }
     }
 }
