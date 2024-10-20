@@ -138,8 +138,8 @@ export default function App() {
       }
       try {
         const frame = await imageCapture.takePhoto({
-          imageHeight:300,
-          imageWidth:300
+          imageHeight:100,
+          imageWidth:100
         });
         const buffer = await blobToBuffer(frame);
 
