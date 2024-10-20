@@ -5,7 +5,7 @@ services:
     build:
       context: ./websocket
     ports:
-      - "8080:5017"
+      - "5017:5017"
     environment:
       - RedisConnection=
       - DefaultConnection=
