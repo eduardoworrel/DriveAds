@@ -9,6 +9,7 @@ services:
     environment:
       - RedisConnection=
       - DefaultConnection=
+      - llama_key=
     networks:
       - app-network
 
