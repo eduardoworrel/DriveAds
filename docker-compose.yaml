@@ -5,14 +5,13 @@ services:
     build:
       context: ./websocket
     ports:
-      - "8080:8080"
+      - "8080:5017"
     environment:
       - RedisConnection=
       - DefaultConnection=
       - llama_key=
     networks:
       - app-network
-
   frontend:
     build:
       context: ./ui
