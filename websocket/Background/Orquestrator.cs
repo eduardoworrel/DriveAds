@@ -84,7 +84,7 @@ public class Orquestrator
     {
         Console.WriteLine($"Cliente {id} aguardando passageiro...");
 
-        var images = await VideoToImageService.ConvertVideoFragmentToImagesAsync(stream.ToArray());
+        var images = await VideoToImageService.ConvertVideoFragmentToImagesWithRetriesAsync(stream.ToArray());
         Console.WriteLine($"images..."+images.Count);
 
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt1.txt"));
@@ -111,7 +111,7 @@ public class Orquestrator
     private async Task<string> HandleColetandoDados(string id, MemoryStream stream, ClientData clientData)
     {
         Console.WriteLine($"images2...;");
-        var images = await VideoToImageService.ConvertVideoFragmentToImagesAsync(stream.ToArray());
+        var images = await VideoToImageService.ConvertVideoFragmentToImagesWithRetriesAsync(stream.ToArray());
         Console.WriteLine($"images2..."+images.Count);
 
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt2.txt"));
