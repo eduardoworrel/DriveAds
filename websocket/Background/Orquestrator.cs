@@ -85,6 +85,7 @@ public class Orquestrator
         Console.WriteLine($"Cliente {id} aguardando passageiro...");
 
         var images = await VideoToImageService.ConvertVideoFragmentToImagesAsync(stream.ToArray());
+        Console.WriteLine($"images..."+images.Count);
 
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt1.txt"));
 
