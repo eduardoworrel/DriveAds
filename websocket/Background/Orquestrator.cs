@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using webapp.Data;
@@ -44,7 +45,7 @@ public class Orquestrator
         _database = _redis.GetDatabase();
     }
 
-    public async Task<string> StartOrContinueProcess(string id, MemoryStream stream, ApplicationDbContext db, string key)
+    public async Task<string> StartOrContinueProcess(string id, MemoryStream stream, ApplicationDbContext db, string key, CancellationToken cts)
     {
         var clientStateKey = GetRedisKeyForClient(id);
         var clientDataJson = _database.StringGet(clientStateKey);
@@ -70,35 +71,38 @@ public class Orquestrator
         switch (clientData.State)
         {
             case ClientState.AguardandoPassageiro:
-                return await HandleAguardandoPassageiro(id, stream, clientData);
+                return await HandleAguardandoPassageiro(id, stream, clientData,cts);
 
             case ClientState.ColetandoDados:
-                return await HandleColetandoDados(id, stream, clientData);
+                return await HandleColetandoDados(id, stream, clientData,cts);
             default:
                 throw new InvalidOperationException("Estado desconhecido");
         }
     }
 
     // Métodos para processar cada estado
-    private async Task<string> HandleAguardandoPassageiro(string id, MemoryStream stream, ClientData clientData)
+    private async Task<string> HandleAguardandoPassageiro(string id, MemoryStream stream, ClientData clientData, CancellationToken cts)
     {
+        
         Console.WriteLine($"Cliente {id} aguardando passageiro...");
+        stream.Position = 0; // Garante que o stream comece do início
+        byte[] imageBytes = stream.ToArray(); // Converte o MemoryStream em array de bytes
+        string base64Image = Convert.ToBase64String(imageBytes); // Converte o array de bytes para base64
 
-        var images = await VideoToImageService.ConvertVideoFragmentToImagesWithRetriesAsync(stream.ToArray());
-        Console.WriteLine($"images..."+images.Count);
+        // Salvar os bytes da imagem em um arquivo
+        File.WriteAllBytes("outputImage.text", Encoding.UTF8.GetBytes(base64Image));
 
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt1.txt"));
 
-        var result = await LlamaService.SendImagesToApiAsync(_key, images, prompt);
+        var result = await LlamaService.SendImagesToApiAsync(_key, [base64Image], prompt, cts);
        try
        {
             result = Regex.Replace(result.Trim(), @"\D", "");
-            Console.WriteLine("first return-:"+result);
             var quantity = int.Parse(result);
             if(quantity > 0)
             {
                 clientData.AdditionalData.Quantity = quantity;
-                return await HandleColetandoDados(id, stream, clientData);
+                UpdateClientState(id, ClientState.ColetandoDados, clientData.AdditionalData);
             }
        }
        catch
@@ -108,15 +112,16 @@ public class Orquestrator
        return "free";
     }
 
-    private async Task<string> HandleColetandoDados(string id, MemoryStream stream, ClientData clientData)
+    private async Task<string> HandleColetandoDados(string id, MemoryStream stream, ClientData clientData, CancellationToken cts)
     {
-        Console.WriteLine($"images2...;");
-        var images = await VideoToImageService.ConvertVideoFragmentToImagesWithRetriesAsync(stream.ToArray());
-        Console.WriteLine($"images2..."+images.Count);
+         stream.Position = 0; // Garante que o stream comece do início
+        byte[] imageBytes = stream.ToArray(); // Converte o MemoryStream em array de bytes
+        string base64Image = Convert.ToBase64String(imageBytes); // Converte o array de bytes para base64
 
+       
         string prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt2.txt"));
 
-        var result = await LlamaService.SendImagesToApiAsync(_key, images, prompt);
+        var result = await LlamaService.SendImagesToApiAsync(_key, [base64Image], prompt, cts);
 
         if (clientData.AdditionalData.Demographic1 == string.Empty)
         {
@@ -132,6 +137,7 @@ public class Orquestrator
         }
         else
         {
+            Console.WriteLine("result3--:"+result);
             clientData.AdditionalData.Demographic3 = result;
             prompt = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "prompt3.txt"));
             
@@ -139,21 +145,24 @@ public class Orquestrator
 
             // Filtra anúncios para evitar os dois últimos reproduzidos
             advertisements = advertisements.Where(ad => !clientData.AdditionalData.LastTwoAdIds.Contains(ad.Id)).ToList();
-
+            Console.WriteLine("ads-->"+advertisements.Count);
             string advertisementsJoined = string.Join(Environment.NewLine + Environment.NewLine, advertisements.ConvertAll(o =>
                 $@"ID:{o.Id}, Text:{o.Text}, Preferences:{o.Pet}, when:{o.Times}, where:{o.Where}, Ages:{o.Ages};"
             ));
 
             var demographic = @$"
 {clientData.AdditionalData.Demographic1}.
+{clientData.AdditionalData.Demographic2}.
+{clientData.AdditionalData.Demographic3}.
 Now is: {clientData.AdditionalData.Time}:
             ";
             var finalPrompt = string.Format(prompt, clientData.AdditionalData.Quantity, demographic, advertisementsJoined);
+            Console.WriteLine(finalPrompt);
             var trying = 0;
             Guid selection = Guid.Empty;
             while(trying < 4 && selection == Guid.Empty){
 
-                var finalResult = await LlamaService.ChatAsync(_key, finalPrompt);
+                var finalResult = await LlamaService.ChatAsync(_key, finalPrompt, cts);
                 Console.WriteLine("---GUID:" + finalResult);
                 try{
                     selection = Guid.Parse(finalResult);

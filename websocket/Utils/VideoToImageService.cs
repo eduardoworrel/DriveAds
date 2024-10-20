@@ -8,7 +8,7 @@ public static class VideoToImageService
     private const int MaxRetries = 3; // Número máximo de tentativas
     private const int TimeoutMilliseconds = 10000; // Tempo limite (10 segundos)
 
-    public static async Task<List<string>> ConvertVideoFragmentToImagesWithRetriesAsync(byte[] videoData)
+    public static async Task<List<string>> ConvertVideoFragmentToImagesWithRetriesAsync(byte[] videoData, CancellationToken cts)
     {
         int attempt = 0;
         List<string> imageBase64List = null;
@@ -18,7 +18,7 @@ public static class VideoToImageService
             attempt++;
             try
             {
-                imageBase64List = await ConvertVideoFragmentToImagesAsync(videoData, TimeoutMilliseconds);
+                imageBase64List = await ConvertVideoFragmentToImagesAsync(videoData, TimeoutMilliseconds, cts);
                 break; // Se funcionar, sai do loop
             }
             catch (TimeoutException ex)
@@ -34,7 +34,7 @@ public static class VideoToImageService
         return imageBase64List;
     }
 
-    private static async Task<List<string>> ConvertVideoFragmentToImagesAsync(byte[] videoData, int timeoutMilliseconds)
+    private static async Task<List<string>> ConvertVideoFragmentToImagesAsync(byte[] videoData, int timeoutMilliseconds, CancellationToken cts)
     {
         var imageBase64List = new List<string>();
 
@@ -60,11 +60,8 @@ public static class VideoToImageService
 
             ffmpegProcess.Start();
 
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-
             // Configura o timeout para matar o processo se demorar muito
-            var timeoutTask = Task.Delay(timeoutMilliseconds, cancellationToken);
+            var timeoutTask = Task.Delay(timeoutMilliseconds, cts);
             
             try
             {
@@ -108,19 +105,15 @@ public static class VideoToImageService
                     }
 
                     await ffmpegProcess.WaitForExitAsync();
-                }, cancellationToken);
+                }, cts);
 
                 // Espera ou o timeout ou o fim do processo
                 var completedTask = await Task.WhenAny(processingTask, timeoutTask);
                 if (completedTask == timeoutTask)
                 {
                     ffmpegProcess.Kill(true); // Força matar o processo
-                    cancellationTokenSource.Cancel(); // Cancela a tarefa de processamento
                     throw new TimeoutException("Tempo limite atingido.");
                 }
-
-                // Se o processo terminar antes do timeout, cancela o timer de timeout
-                cancellationTokenSource.Cancel();
             }
             catch (Exception)
             {

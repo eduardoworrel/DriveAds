@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 public static class LlamaService
 {
     private static readonly HttpClient _httpClient = new HttpClient();
-    private const int MaxRetries = 5; // Número máximo de tentativas
-    private const int RetryDelay = 6000; // Tempo de espera entre tentativas (em milissegundos)
+    private const int MaxRetries = 2; // Número máximo de tentativas
+    private const int RetryDelay = 3000; // Tempo de espera entre tentativas (em milissegundos)
 
     // Método para fazer a requisição à API
-    public static async Task<string> ChatAsync(string apiKey, string textPrompt)
+    public static async Task<string> ChatAsync(string apiKey, string textPrompt, CancellationToken cts)
     {
         // Definir o URL da API
         var url = "https://api.aimlapi.com/v1/chat/completions";
@@ -39,7 +39,7 @@ public static class LlamaService
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
         int attempt = 0;
-        while (attempt < MaxRetries)
+        while (attempt < MaxRetries || !cts.IsCancellationRequested)
         {
             try
             {
@@ -68,12 +68,12 @@ public static class LlamaService
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Erro ao chamar a API: {ex.Message}");
-                if (attempt < MaxRetries)
+                if (attempt < MaxRetries|| !cts.IsCancellationRequested)
                 {
                     Console.WriteLine(
                         $"Tentativa {attempt} falhou. Tentando novamente em {RetryDelay / 1000} segundos..."
                     );
-                    await Task.Delay(RetryDelay); // Espera antes de tentar novamente
+                    await Task.Delay(RetryDelay, cts); // Espera antes de tentar novamente
                 }
                 else
                 {
@@ -89,7 +89,8 @@ public static class LlamaService
     public static async Task<string> SendImagesToApiAsync(
         string apiKey,
         List<string> images,
-        string textPrompt
+        string textPrompt,
+        CancellationToken cts
     )
     {
         // Definir o URL da API
@@ -105,7 +106,7 @@ public static class LlamaService
                 {
                     role = "user",
                     type = "image_url",
-                    image_url = new { url = "data:image/png;base64," + image },
+                    image_url = new { url =  "data:image/jpeg;base64,"+image },
                 }
             );
         }
@@ -130,17 +131,17 @@ public static class LlamaService
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
         int attempt = 0;
-        while (attempt < MaxRetries)
+        while (attempt < MaxRetries || !cts.IsCancellationRequested)
         {
             try
             {
                 attempt++;
 
                 // Envia a requisição HTTP POST
-                var response = await _httpClient.PostAsync(url, requestContent);
+                var response = await _httpClient.PostAsync(url, requestContent, cts);
 
                 // Garante que a resposta seja bem-sucedida
-                var responseBody = await response.Content.ReadAsStringAsync();
+                var responseBody = await response.Content.ReadAsStringAsync(cts);
                 response.EnsureSuccessStatusCode();
 
                 // Parseia o resultado para JSON
@@ -159,12 +160,12 @@ public static class LlamaService
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Erro ao chamar a API: {ex.Message}");
-                if (attempt < MaxRetries)
+                if (attempt < MaxRetries || !cts.IsCancellationRequested)
                 {
                     Console.WriteLine(
                         $"Tentativa {attempt} falhou. Tentando novamente em {RetryDelay / 1000} segundos..."
                     );
-                    await Task.Delay(RetryDelay); // Espera antes de tentar novamente
+                    await Task.Delay(RetryDelay, cts); 
                 }
                 else
                 {

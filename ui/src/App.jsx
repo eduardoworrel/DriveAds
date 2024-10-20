@@ -5,8 +5,28 @@ import theme from './theme';
 import { useState, useRef, useEffect } from 'react';
 import { MinhasConquistas } from './shared/components/minhas-conquistas/MinhasConquistas';
 import { Skeleton, TextField } from '@mui/material';
-function getSupportedMimeType(types) {
-  return types.find((type) => MediaRecorder.isTypeSupported(type)) || null;
+const textToSpeech = (text) => {
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  synth.speak(utterance);
+};
+
+function blobToBuffer(blob) {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+          resolve(event.target.result); // Resolvendo com o ArrayBuffer
+      };
+
+      reader.onerror = function(err) {
+          reject(err); // Rejeitando em caso de erro
+      };
+
+      reader.readAsArrayBuffer(blob); // Lê o Blob como ArrayBuffer
+  });
 }
 export default function App() {
   const [media, setMedia] = useState(null);
@@ -16,6 +36,8 @@ export default function App() {
   const [renderSendName, setRenderSendName] = useState(false);
   const videoRef = useRef(null);
   const wsRef = useRef(null);
+  const captureIntervalRef = useRef(null);
+  const ShouldCaptureIntervalRef = useRef(true);
 
   const constraints = {
     audio: false,
@@ -37,9 +59,11 @@ export default function App() {
 
   const handleVideo = async () => {
     if (ative) {
+      // Se já está ativo, parar a captura e fechar o WebSocket
       if (media) {
         media.getTracks().forEach(track => track.stop());
       }
+      clearInterval(captureIntervalRef.current);
       setAtive(false);
       setMedia(null);
       if (wsRef.current) {
@@ -47,85 +71,59 @@ export default function App() {
       }
       console.log("Media stopped and WebSocket closed");
     } else {
+      // Iniciar a captura de mídia e WebSocket
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         setMedia(stream);
         setAtive(true);
         console.log("Media started");
 
-        wsRef.current = new WebSocket('wss://ws.eduardoworrel.com/api/sync/'+nome + (new Date()).toTimeString());
+        wsRef.current = new WebSocket('ws://localhost:5017/api/sync/' + nome + (new Date()).toTimeString());
         wsRef.current.onopen = () => {
           console.log('WebSocket connected');
-          sendMediaStream(stream);
+          startImageCapture(stream);
         }
         wsRef.current.onclose = () => {
           console.log('WebSocket closed');
+          wsRef.current.close();
         };
       } catch (error) {
         console.error(`getUserMedia error: ${error.name}`, error);
       }
     }
   };
-  let types = ['video/webm;codecs=h264',
-    'video/webm',
-    'video/mp4'];
-let mimeType = getSupportedMimeType(types);
-  const sendMediaStream = (stream) => {
-    const mediaRecorder = new MediaRecorder(stream,{
-        mimeType:mimeType
-    });
 
+  const startImageCapture = (stream) => {
     wsRef.current.onmessage = (event) => {
       const message = event.data;
       console.log('Received message:', message);
       if(message == "free"){
-        if(mediaRecorder.state != "recording"){
-          mediaRecorder.start(3000);
-        }
+        ShouldCaptureIntervalRef.current = true;
       }else{
         textToSpeech(message);
       }
     };
+    const track = stream.getVideoTracks()[0];
+    const imageCapture = new ImageCapture(track);
 
-
-    const reader = new FileReader();
-   
-  
-    const textToSpeech = (text) => {
-      const synth = window.speechSynthesis;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.pitch = 1;
-      utterance.rate = 1;
-      synth.speak(utterance);
-    };
-
-    mediaRecorder.ondataavailable = (event) => {
-
-      console.log('event')
-      if (event.data.size > 0) {
-        mediaRecorder.stop();
-        const videoBlob = event.data;
-        if (wsRef.current.readyState === WebSocket.OPEN) {
-          const file = new File([videoBlob], 'filename', { type: 'video/webm' });
-          reader.onload = function(e) {
-            const rawData = e.target.result;
-            wsRef.current.send(rawData);
-          };
-          try{
-            reader.readAsArrayBuffer(file);
-          }catch{}
-        }
+    // Configura a captura de imagem em intervalos regulares (por exemplo, a cada 3 segundos)
+    captureIntervalRef.current = setInterval(async () => {
+      if(ShouldCaptureIntervalRef.current == false){
+        return;
       }
-    };
+      try {
+        const frame = await imageCapture.takePhoto();
+      
+        const buffer = await blobToBuffer(frame);
 
-    mediaRecorder.start(3000);
-    console.log('start')
-    const stopRecording = () => {
-      mediaRecorder.stop();
-      console.log("Recording stopped");
-    };
-
-    return { stopRecording };
+        if (wsRef.current.readyState === WebSocket.OPEN) {
+          ShouldCaptureIntervalRef.current = true;
+          wsRef.current.send(buffer);
+        }
+      } catch (error) {
+        console.error('Image capture failed:', error);
+      }
+    }, 5000);
   };
 
   useEffect(() => {
@@ -170,9 +168,6 @@ let mimeType = getSupportedMimeType(types);
                 {ative ? 'Cancel' : 'Start'}
               </Button>
             )}
-            {/* <Button bgcolor={theme.palette.secondary.main} onClick={handleMinhasConquistas} style={{backgroundColor:theme.palette.primary.dark}}>
-              {renderMinhasConquistas ? 'Back' : 'Minhas Conquistas'}
-            </Button> */}
           </Box>
         </>
       )}
