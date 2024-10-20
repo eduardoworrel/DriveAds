@@ -8,7 +8,10 @@ public static class VideoToImageService
     private const int MaxRetries = 3; // Número máximo de tentativas
     private const int TimeoutMilliseconds = 10000; // Tempo limite (10 segundos)
 
-    public static async Task<List<string>> ConvertVideoFragmentToImagesWithRetriesAsync(byte[] videoData, CancellationToken cts)
+    public static async Task<List<string>> ConvertVideoFragmentToImagesWithRetriesAsync(
+        byte[] videoData,
+        CancellationToken cts
+    )
     {
         int attempt = 0;
         List<string> imageBase64List = null;
@@ -19,6 +22,7 @@ public static class VideoToImageService
             try
             {
                 imageBase64List = await ConvertVideoFragmentToImagesAsync(videoData, TimeoutMilliseconds, cts);
+
                 break; // Se funcionar, sai do loop
             }
             catch (TimeoutException ex)
@@ -34,7 +38,11 @@ public static class VideoToImageService
         return imageBase64List;
     }
 
-    private static async Task<List<string>> ConvertVideoFragmentToImagesAsync(byte[] videoData, int timeoutMilliseconds, CancellationToken cts)
+    private static async Task<List<string>> ConvertVideoFragmentToImagesAsync(
+        byte[] videoData,
+        int timeoutMilliseconds,
+        CancellationToken cts
+    )
     {
         var imageBase64List = new List<string>();
 
@@ -48,64 +56,78 @@ public static class VideoToImageService
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "ffmpeg",
-                    Arguments = "-i pipe:0 -vf scale=800:-1,fps=1 -f image2pipe -vcodec mjpeg pipe:1",
+                    Arguments =
+                        "-i pipe:0 -vf scale=800:-1,fps=1 -f image2pipe -vcodec mjpeg pipe:1",
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = false, // Isso ajuda a capturar erros
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 },
-                EnableRaisingEvents = true
+                EnableRaisingEvents = true,
             };
 
             ffmpegProcess.Start();
 
             // Configura o timeout para matar o processo se demorar muito
             var timeoutTask = Task.Delay(timeoutMilliseconds, cts);
-            
+
             try
             {
-                var processingTask = Task.Run(async () =>
-                {
-                    // Enviar os dados do vídeo para o processo de entrada
-                    await videoStream.CopyToAsync(ffmpegProcess.StandardInput.BaseStream);
-                    ffmpegProcess.StandardInput.Close();
-
-                    // Ler a saída do processo (imagens) e salvar na lista
-                    using (var memoryStream = new MemoryStream())
+                var processingTask = Task.Run(
+                    async () =>
                     {
-                        var outputTask = Task.Run(async () =>
+                        // Enviar os dados do vídeo para o processo de entrada
+                        await videoStream.CopyToAsync(ffmpegProcess.StandardInput.BaseStream);
+                        ffmpegProcess.StandardInput.Close();
+
+                        // Ler a saída do processo (imagens) e salvar na lista
+                        using (var memoryStream = new MemoryStream())
                         {
-                            byte[] buffer = new byte[4096];
-                            int bytesRead;
-                            while ((bytesRead = await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            var outputTask = Task.Run(async () =>
                             {
-                                memoryStream.Write(buffer, 0, bytesRead);
-                            }
-                        });
+                                byte[] buffer = new byte[4096];
+                                int bytesRead;
+                                while (
+                                    (
+                                        bytesRead =
+                                            await ffmpegProcess.StandardOutput.BaseStream.ReadAsync(
+                                                buffer,
+                                                0,
+                                                buffer.Length
+                                            )
+                                    ) > 0
+                                )
+                                {
+                                    memoryStream.Write(buffer, 0, bytesRead);
+                                }
+                            });
 
-                        var errorTask = Task.Run(async () =>
-                        {
-                            // Consumir o stderr para evitar travamento
-                            string errorOutput = await ffmpegProcess.StandardError.ReadToEndAsync();
-                            if (!string.IsNullOrEmpty(errorOutput))
+                            var errorTask = Task.Run(async () =>
                             {
-                                Debug.WriteLine($"FFmpeg error: {errorOutput}");
+                                // Consumir o stderr para evitar travamento
+                                string errorOutput =
+                                    await ffmpegProcess.StandardError.ReadToEndAsync();
+                                if (!string.IsNullOrEmpty(errorOutput))
+                                {
+                                    Debug.WriteLine($"FFmpeg error: {errorOutput}");
+                                }
+                            });
+
+                            await Task.WhenAll(outputTask, errorTask);
+
+                            if (memoryStream.Length > 0)
+                            {
+                                byte[] imageData = memoryStream.ToArray();
+                                string imageBase64 = Convert.ToBase64String(imageData);
+                                imageBase64List.Add(imageBase64);
                             }
-                        });
-
-                        await Task.WhenAll(outputTask, errorTask);
-
-                        if (memoryStream.Length > 0)
-                        {
-                            byte[] imageData = memoryStream.ToArray();
-                            string imageBase64 = Convert.ToBase64String(imageData);
-                            imageBase64List.Add(imageBase64);
                         }
-                    }
 
-                    await ffmpegProcess.WaitForExitAsync();
-                }, cts);
+                        await ffmpegProcess.WaitForExitAsync();
+                    },
+                    cts
+                );
 
                 // Espera ou o timeout ou o fim do processo
                 var completedTask = await Task.WhenAny(processingTask, timeoutTask);

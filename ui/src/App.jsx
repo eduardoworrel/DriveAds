@@ -87,10 +87,12 @@ export default function App() {
   };
 
   const handleSendNome = () => {
+
     if(nome.length == 0){
       return alert('The name field is mandatory.')
     }
     setRenderSendName(true); // Altera o estado para mostrar o restante da página
+
 
   };
 
@@ -207,11 +209,13 @@ export default function App() {
               onChange={handleChangeNome}
             />
           </Box>
+
           <Box justifyContent={'center'} display={'flex'} >
             <Button onClick={handleSendNome} style={{ backgroundColor: theme.palette.primary.dark, width:'100px' }}  >
               Send
             </Button>
           </Box>
+
 
         </Box>
       )}
@@ -224,6 +228,7 @@ export default function App() {
               <Button onClick={handleVideo} style={{ backgroundColor: ative ? theme.palette.primary.dark : theme.palette.primary.dark, width:'100px'  }}>
                 {ative ? 'Cancel' : 'Start'}
               </Button>
+
 
 
           </Box>

@@ -16,7 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped(provider => new Orquestrator(
     builder.Configuration.GetConnectionString("RedisConnection")
-     ?? Environment.GetEnvironmentVariable("RedisConnection")
+        ?? Environment.GetEnvironmentVariable("RedisConnection")
         ?? throw new InvalidOperationException("Redis erro")
 ));
 

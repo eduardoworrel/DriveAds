@@ -14,7 +14,9 @@ public static class LlamaService
     private const int RetryDelay = 3000; // Tempo de espera entre tentativas (em milissegundos)
 
     // Método para fazer a requisição à API
+
     public static async Task<string> ChatAsync(string apiKey, string textPrompt, CancellationToken cts)
+
     {
         // Definir o URL da API
         var url = "https://api.aimlapi.com/v1/chat/completions";
@@ -106,7 +108,9 @@ public static class LlamaService
                 {
                     role = "user",
                     type = "image_url",
+
                     image_url = new { url =  "data:image/jpeg;base64,"+image },
+
                 }
             );
         }
@@ -165,7 +169,9 @@ public static class LlamaService
                     Console.WriteLine(
                         $"Tentativa {attempt} falhou. Tentando novamente em {RetryDelay / 1000} segundos..."
                     );
+
                     await Task.Delay(RetryDelay, cts); 
+
                 }
                 else
                 {
