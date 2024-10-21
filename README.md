@@ -14,9 +14,9 @@ The project is structured as a monorepo with three main directories:
 
 
 ## Disclaimer
-Para facilitar a validação do conceito de nossa aplicação web, o suporte foi limitado ao Google Chrome. Pedimos desculpas pela inconveniência e pela limitação. Essa abordagem nos permitirá iterar mais rapidamente e focar no desenvolvimento das principais funcionalidades neste estágio.
+To facilitate the validation of our web application's concept, support has been limited to Google Chrome. We apologize for any inconvenience and limitations. This approach will allow us to iterate more quickly and focus on developing key features at this stage.
 
-Recomendamos que os usuários acessem a aplicação utilizando o Chrome para garantir a melhor experiência possível.
+We recommend that users access the application using Chrome to ensure the best possible experience
 
 
 ![img_devs](./image.png)
